@@ -11,6 +11,28 @@ export function BookDetails({ bookId, onBack }) {
 
     if (!book) return <div>Loading...</div>
 
+    // Additions:
+    const pageCountDesc = book.pageCount > 500
+        ? 'Serious Reading'
+        : book.pageCount > 200
+            ? 'Descent Reading'
+            : book.pageCount < 100
+                ? 'Light Reading'
+                : ''
+
+    const yearsSincePublished = new Date().getFullYear() - book.publishedDate
+    const publishDesc = yearsSincePublished > 10
+        ? 'Vintage'
+        : yearsSincePublished < 1
+            ? 'New'
+            : ''
+
+    const priceClass = book.listPrice.amount > 150
+        ? 'expensive'
+        : book.listPrice.amount < 20
+            ? 'cheap'
+            : ''
+
     return (
         <section className="book-details">
             <button onClick={onBack}>Back</button>
@@ -18,9 +40,12 @@ export function BookDetails({ bookId, onBack }) {
             <h5>{book.description}</h5>
             <img src={book.imgUrl} alt={book.title} />
             <p>
-                Price: {book.listPrice.amount} {book.listPrice.currencyCode}
+                Price: <span className={priceClass}>{book.listPrice.amount} {book.listPrice.currencyCode}</span>
             </p>
             {book.listPrice.isOnSale && <p style={{ color: 'red' }}>On Sale!</p>}
+            {/* Additions below */}
+            <p>Page Count: {book.pageCount} – {pageCountDesc}</p>
+            <p>Published: {book.publishedDate} {publishDesc && `– ${publishDesc}`}</p>
         </section>
     )
 }
