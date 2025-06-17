@@ -1,4 +1,6 @@
 import { bookService } from "../services/book.service.js"
+import { LongTxt } from '../cmps/LongTxt.jsx'
+
 
 const { useEffect, useState } = React
 
@@ -11,7 +13,6 @@ export function BookDetails({ bookId, onBack }) {
 
     if (!book) return <div>Loading...</div>
 
-    // Additions:
     const pageCountDesc = book.pageCount > 500
         ? 'Serious Reading'
         : book.pageCount > 200
@@ -37,13 +38,14 @@ export function BookDetails({ bookId, onBack }) {
         <section className="book-details">
             <button onClick={onBack}>Back</button>
             <h1>{book.title}</h1>
-            <h5>{book.description}</h5>
+            <LongTxt txt={book.description} />
+
             <img src={book.imgUrl} alt={book.title} />
             <p>
                 Price: <span className={priceClass}>{book.listPrice.amount} {book.listPrice.currencyCode}</span>
             </p>
             {book.listPrice.isOnSale && <p style={{ color: 'red' }}>On Sale!</p>}
-            {/* Additions below */}
+            {}
             <p>Page Count: {book.pageCount} – {pageCountDesc}</p>
             <p>Published: {book.publishedDate} {publishDesc && `– ${publishDesc}`}</p>
         </section>
