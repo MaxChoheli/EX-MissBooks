@@ -46,41 +46,29 @@ function getDefaultFilter() {
 function _createBooks() {
     let books = utilService.loadFromStorage(BOOK_KEY)
     if (!books || !books.length) {
-        books = [
-            {
+        const ctgs = ['Love', 'Fiction', 'Poetry', 'Computers', 'Religion']
+        books = []
+        for (let i = 0; i < 20; i++) {
+            const book = {
                 id: utilService.makeId(),
-                title: 'metus hendrerit',
-                description: 'placerat nisi sodales suscipit tellus',
-                imgUrl: 'BooksImages/20.jpg',
+                title: utilService.makeLorem(2),
+                subtitle: utilService.makeLorem(4),
+                authors: [utilService.makeLorem(1)],
+                publishedDate: utilService.getRandomIntInclusive(1950, 2024),
+                description: utilService.makeLorem(20),
+                pageCount: utilService.getRandomIntInclusive(20, 600),
+                categories: [ctgs[utilService.getRandomIntInclusive(0, ctgs.length - 1)]],
+                imgUrl: `BooksImages/${i + 1}.jpg`
+                , language: "en",
                 listPrice: {
-                    amount: 109,
-                    currencyCode: 'EUR',
-                    isOnSale: false,
-                },
-            },
-            {
-                id: utilService.makeId(),
-                title: 'React Essentials',
-                description: 'Learn React from scratch with fun projects.',
-                imgUrl: 'BooksImages/1.jpg',
-                listPrice: {
-                    amount: 120,
-                    currencyCode: 'USD',
-                    isOnSale: true,
-                },
-            },
-            {
-                id: utilService.makeId(),
-                title: 'Mastering Angular',
-                description: 'Deep dive into Angular and TypeScript.',
-                imgUrl: 'BooksImages/3.jpg',
-                listPrice: {
-                    amount: 200,
-                    currencyCode: 'USD',
-                    isOnSale: false,
-                },
-            },
-        ]
+                    amount: utilService.getRandomIntInclusive(80, 500),
+                    currencyCode: "EUR",
+                    isOnSale: Math.random() > 0.7
+                }
+            }
+            books.push(book)
+        }
         utilService.saveToStorage(BOOK_KEY, books)
     }
 }
+
