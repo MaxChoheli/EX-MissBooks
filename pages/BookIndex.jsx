@@ -2,7 +2,7 @@ import { BookFilter } from "../cmps/BookFilter.jsx"
 import { BookList } from "../cmps/BookList.jsx"
 import { bookService } from "../services/book.service.js"
 import { BookDetails } from "./BookDetails.jsx"
-import { showUserMsg } from '../services/event-bus.service.js'
+import { showUserMsg } from '../services/event-Bus.Service.js'
 
 const { useState, useEffect, Fragment } = React
 

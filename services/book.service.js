@@ -10,6 +10,8 @@ export const bookService = {
     remove,
     save,
     getDefaultFilter,
+    addReview,
+    removeReview
 }
 
 function query(filterBy = getDefaultFilter()) {
@@ -58,13 +60,14 @@ function _createBooks() {
                 description: utilService.makeLorem(20),
                 pageCount: utilService.getRandomIntInclusive(20, 600),
                 categories: [ctgs[utilService.getRandomIntInclusive(0, ctgs.length - 1)]],
-                imgUrl: `BooksImages/${i + 1}.jpg`
-                , language: "en",
+                imgUrl: `BooksImages/${i + 1}.jpg`,
+                language: "en",
                 listPrice: {
                     amount: utilService.getRandomIntInclusive(80, 500),
                     currencyCode: "EUR",
                     isOnSale: Math.random() > 0.7
-                }
+                },
+                reviews: []
             }
             books.push(book)
         }
@@ -72,3 +75,18 @@ function _createBooks() {
     }
 }
 
+function addReview(bookId, review) {
+    return get(bookId).then(book => {
+        if (!book.reviews) book.reviews = []
+        review.id = utilService.makeId()
+        book.reviews.unshift(review)
+        return save(book)
+    })
+}
+
+function removeReview(bookId, reviewId) {
+    return get(bookId).then(book => {
+        book.reviews = book.reviews.filter(r => r.id !== reviewId)
+        return save(book)
+    })
+}
