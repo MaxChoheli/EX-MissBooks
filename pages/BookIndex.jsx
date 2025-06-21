@@ -2,6 +2,7 @@ import { BookFilter } from "../cmps/BookFilter.jsx"
 import { BookList } from "../cmps/BookList.jsx"
 import { bookService } from "../services/book.service.js"
 import { BookDetails } from "./BookDetails.jsx"
+import { showUserMsg } from '../services/event-bus.service.js'
 
 const { useState, useEffect, Fragment } = React
 
@@ -24,8 +25,12 @@ export function BookIndex() {
         bookService.remove(bookId)
             .then(() => {
                 setBooks(prevBooks => prevBooks.filter(book => book.id !== bookId))
+                showUserMsg('Book removed!')
             })
-            .catch(console.error)
+            .catch(err => {
+                console.error(err)
+                showUserMsg('Failed to remove book', 'error')
+            })
     }
 
     function onSetFilter(filterBy) {
