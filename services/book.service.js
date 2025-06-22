@@ -11,7 +11,8 @@ export const bookService = {
     save,
     getDefaultFilter,
     addReview,
-    removeReview
+    removeReview,
+    getNextBookId
 }
 
 function query(filterBy = getDefaultFilter()) {
@@ -90,3 +91,16 @@ function removeReview(bookId, reviewId) {
         return save(book)
     })
 }
+
+function getNextBookId(bookId, diff = 1) {
+    return storageService.query(BOOK_KEY).then(books => {
+        const idx = books.findIndex(book => book.id === bookId)
+        let nextIdx = idx + diff
+
+        if (nextIdx >= books.length) nextIdx = 0
+        if (nextIdx < 0) nextIdx = books.length - 1
+
+        return books[nextIdx].id
+    })
+}
+

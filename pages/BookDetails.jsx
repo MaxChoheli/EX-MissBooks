@@ -4,13 +4,16 @@ import { AddReview } from '../cmps/AddReview.jsx'
 import { showUserMsg } from '../services/event-Bus.Service.js'
 
 const { useEffect, useState } = React
+const { Link, useParams } = ReactRouterDOM
 
-export function BookDetails({ bookId, onBack }) {
+export function BookDetails() {
+    const params = useParams()
+    const bookId = params.bookId
     const [book, setBook] = useState(null)
 
     useEffect(() => {
         bookService.get(bookId).then(setBook)
-    }, [])
+    }, [bookId])
 
     if (!book) return <div>Loading...</div>
 
@@ -59,9 +62,16 @@ export function BookDetails({ bookId, onBack }) {
             })
     }
 
+    function goToNext(diff) {
+        bookService.getNextBookId(book.id, diff)
+            .then(nextBookId => {
+                location.hash = `#/book/${nextBookId}`
+            })
+    }
+
     return (
         <section className="book-details">
-            <button onClick={onBack}>Back</button>
+            <Link to="/book" className="btn">Back</Link>
             <h1>{book.title}</h1>
             <LongTxt txt={book.description} />
 
@@ -85,12 +95,17 @@ export function BookDetails({ bookId, onBack }) {
                                 <p><strong>{review.fullname}</strong></p>
                                 <p>Rating: {review.rating}</p>
                                 <p>Read At: {review.readAt}</p>
-                                <button onClick={() => onRemoveReview(review.id)}>Remove</button>
+                                <button onClick={() => onRemoveReview(review.id)} className="btn">Remove</button>
                             </li>
                         ))}
                     </ul>
                 </section>
             )}
+
+            <section className="book-nav">
+                <button onClick={() => goToNext(-1)} className="btn">Prev Book</button>
+                <button onClick={() => goToNext(1)} className="btn">Next Book</button>
+            </section>
         </section>
     )
 }
