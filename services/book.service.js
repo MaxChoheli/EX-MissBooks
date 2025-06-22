@@ -113,19 +113,19 @@ function addGoogleBook(googleBook) {
 
         const newBook = {
             id: googleBook.id,
-            title: googleBook.title,
-            subtitle: '',
-            authors: ['Unknown'],
-            publishedDate: 2024,
-            description: 'Google book import',
-            pageCount: 100,
-            categories: ['Google'],
-            imgUrl: 'BooksImages/1.jpg',
-            language: 'en',
+            title: googleBook.title || 'No Title',
+            subtitle: googleBook.subtitle || '',
+            authors: googleBook.authors || ['Unknown'],
+            publishedDate: googleBook.publishedDate || 2024,
+            description: googleBook.description || 'No description',
+            pageCount: googleBook.pageCount || 100,
+            categories: googleBook.categories || ['General'],
+            imgUrl: googleBook.thumbnail ? googleBook.thumbnail : 'BooksImages/1.jpg',
+            language: googleBook.language || 'en',
             listPrice: {
-                amount: 100,
+                amount: utilService.getRandomIntInclusive(80, 500),
                 currencyCode: 'USD',
-                isOnSale: false
+                isOnSale: Math.random() > 0.7
             },
             reviews: []
         }
@@ -135,4 +135,5 @@ function addGoogleBook(googleBook) {
         return Promise.resolve()
     })
 }
+
 

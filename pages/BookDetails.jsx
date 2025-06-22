@@ -73,9 +73,16 @@ export function BookDetails() {
         <section className="book-details">
             <Link to="/book" className="btn">Back</Link>
             <h1>{book.title}</h1>
+            {book.subtitle && <h3>{book.subtitle}</h3>}
+
+            <p><strong>Authors:</strong> {book.authors.join(', ')}</p>
+            <p><strong>Categories:</strong> {book.categories.join(', ')}</p>
+            <p><strong>Language:</strong> {book.language}</p>
+
             <LongTxt txt={book.description} />
 
             <img src={book.imgUrl} alt={book.title} />
+
             <p>
                 Price: <span className={priceClass}>{book.listPrice.amount} {book.listPrice.currencyCode}</span>
             </p>
