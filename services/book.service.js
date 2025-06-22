@@ -12,7 +12,8 @@ export const bookService = {
     getDefaultFilter,
     addReview,
     removeReview,
-    getNextBookId
+    getNextBookId,
+    addGoogleBook
 }
 
 function query(filterBy = getDefaultFilter()) {
@@ -101,6 +102,37 @@ function getNextBookId(bookId, diff = 1) {
         if (nextIdx < 0) nextIdx = books.length - 1
 
         return books[nextIdx].id
+    })
+}
+
+function addGoogleBook(googleBook) {
+    return storageService.query(BOOK_KEY).then(books => {
+        if (books.find(book => book.id === googleBook.id)) {
+            return Promise.reject('Book already exists')
+        }
+
+        const newBook = {
+            id: googleBook.id,
+            title: googleBook.title,
+            subtitle: '',
+            authors: ['Unknown'],
+            publishedDate: 2024,
+            description: 'Google book import',
+            pageCount: 100,
+            categories: ['Google'],
+            imgUrl: 'BooksImages/1.jpg',
+            language: 'en',
+            listPrice: {
+                amount: 100,
+                currencyCode: 'USD',
+                isOnSale: false
+            },
+            reviews: []
+        }
+
+        books.push(newBook)
+        utilService.saveToStorage(BOOK_KEY, books)
+        return Promise.resolve()
     })
 }
 
