@@ -10,6 +10,7 @@ import { Home } from "./pages/Home.jsx"
 import { BookIndex } from "./pages/BookIndex.jsx"
 import { BookDetails } from "./pages/BookDetails.jsx"
 import { BookAdd } from "./cmps/BookAdd.jsx"
+import { Dashboard } from "./pages/Dashboard.jsx"
 
 function MainRoutes() {
     const location = useLocation()
@@ -28,6 +29,8 @@ function MainRoutes() {
                 <Route path="/book/:bookId" element={<BookDetails />} />
                 <Route path="/book/edit" element={<h1>Book Edit (to do)</h1>} />
                 <Route path="/book/add" element={<BookAdd />} />
+
+                <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
         </main>
     )

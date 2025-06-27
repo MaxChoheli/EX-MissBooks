@@ -2,14 +2,21 @@ import { BookFilter } from "../cmps/BookFilter.jsx"
 import { BookList } from "../cmps/BookList.jsx"
 import { bookService } from "../services/book.service.js"
 import { BookDetails } from "./BookDetails.jsx"
-import { showUserMsg } from '../services/event-Bus.Service.js'
+import { showUserMsg } from '../services/event-BusService.js'
 
 const { useState, useEffect, Fragment } = React
+const { useSearchParams } = ReactRouterDOM
 
 export function BookIndex() {
     const [books, setBooks] = useState(null)
     const [selectedBookId, setSelectedBookId] = useState(null)
-    const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter())
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    const [filterBy, setFilterBy] = useState(() => {
+        return {
+            txt: searchParams.get('txt') || ''
+        }
+    })
 
     useEffect(() => {
         loadBooks()
@@ -33,8 +40,9 @@ export function BookIndex() {
             })
     }
 
-    function onSetFilter(filterBy) {
-        setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
+    function onSetFilter(newFilter) {
+        setFilterBy(prev => ({ ...prev, ...newFilter }))
+        setSearchParams(newFilter)
     }
 
     function onSelectBookId(bookId) {
@@ -50,6 +58,7 @@ export function BookIndex() {
                     bookId={selectedBookId}
                     onBack={() => setSelectedBookId(null)}
                 />}
+
             {!selectedBookId &&
                 <Fragment>
                     <BookFilter

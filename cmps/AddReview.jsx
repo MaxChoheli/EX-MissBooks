@@ -1,3 +1,7 @@
+import { RateBySelect } from './RateBySelect.jsx'
+import { RateByStars } from './RateByStars.jsx'
+import { RateByTextbox } from './RateByTextbox.jsx'
+
 const { useState } = React
 
 export function AddReview({ onAddReview }) {
@@ -7,15 +11,32 @@ export function AddReview({ onAddReview }) {
         readAt: ''
     })
 
+    const [ratingType, setRatingType] = useState('select')
+
     function handleChange({ target }) {
         const { name, value } = target
         setReview(prev => ({ ...prev, [name]: value }))
+    }
+
+    function onSetVal(val) {
+        setReview(prev => ({ ...prev, rating: val }))
     }
 
     function onSubmit(ev) {
         ev.preventDefault()
         onAddReview(review)
         setReview({ fullname: '', rating: 5, readAt: '' })
+    }
+
+    function getRatingCmp() {
+        switch (ratingType) {
+            case 'stars':
+                return <RateByStars val={review.rating} onSetVal={onSetVal} />
+            case 'textbox':
+                return <RateByTextbox val={review.rating} onSetVal={onSetVal} />
+            default:
+                return <RateBySelect val={review.rating} onSetVal={onSetVal} />
+        }
     }
 
     return (
@@ -34,19 +55,6 @@ export function AddReview({ onAddReview }) {
                 </label>
 
                 <label>
-                    Rating:
-                    <select
-                        name="rating"
-                        value={review.rating}
-                        onChange={handleChange}
-                    >
-                        {[1, 2, 3, 4, 5].map(star =>
-                            <option key={star} value={star}>{star}</option>
-                        )}
-                    </select>
-                </label>
-
-                <label>
                     Read At:
                     <input
                         type="date"
@@ -56,6 +64,43 @@ export function AddReview({ onAddReview }) {
                         required
                     />
                 </label>
+
+                <fieldset>
+                    <legend>Rating Type:</legend>
+                    <label>
+                        <input
+                            type="radio"
+                            name="ratingType"
+                            value="select"
+                            checked={ratingType === 'select'}
+                            onChange={() => setRatingType('select')}
+                        />
+                        Select
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="ratingType"
+                            value="textbox"
+                            checked={ratingType === 'textbox'}
+                            onChange={() => setRatingType('textbox')}
+                        />
+                        Textbox
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="ratingType"
+                            value="stars"
+                            checked={ratingType === 'stars'}
+                            onChange={() => setRatingType('stars')}
+                        />
+                        Stars
+                    </label>
+                </fieldset>
+
+                <label>Rating:</label>
+                {getRatingCmp()}
 
                 <button>Add</button>
             </form>

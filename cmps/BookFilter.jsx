@@ -17,20 +17,22 @@ export function BookFilter({ defaultFilter, onSetFilter }) {
         <section className="book-filter container">
             <h2>Filter Books</h2>
             <form>
-                <label htmlFor="title">Title:</label>
-                <input type="text"
-                    id="title"
-                    name="title"
-                    value={filterBy.title}
+                <label htmlFor="txt">Title:</label>
+                <input
+                    type="text"
+                    id="txt"
+                    name="txt"
+                    value={filterBy.txt}
                     onChange={handleChange}
                     placeholder="Search by title"
                 />
 
                 <label htmlFor="maxPrice">Max Price:</label>
-                <input type="number"
+                <input
+                    type="number"
                     id="maxPrice"
                     name="maxPrice"
-                    value={filterBy.maxPrice}
+                    value={filterBy.maxPrice || ''}
                     onChange={handleChange}
                     placeholder="Enter max price"
                 />
